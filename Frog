@@ -1,0 +1,79 @@
+class Frog {
+  int x, y, size;
+  boolean onLog;
+
+  Frog(int x, int y, int size) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.onLog = false;
+  }
+
+  void show() {
+    fill(0, 255, 0);
+    rect(x, y, size, size);
+  }
+
+void update(ArrayList<Log> logs, ArrayList<Car> cars, boolean[] targetsReached) {
+  onLog = false;
+
+  // Define the actual river area where the frog needs to be on a log
+  int riverStartY = gridSize * 2; // River starts after the first safe zone and targets
+  int riverEndY = gridSize * (numRivers + 1); // River ends before the road starts
+
+  // Check if the frog is in the river section
+  if (y >= riverStartY && y <= riverEndY) {
+    for (Log log : logs) {
+      // Check if the frog's position overlaps with any log's position
+      if (y == log.y && x + size > log.x && x < log.x + log.size) {
+        onLog = true;
+        x += log.speed;  // Move the frog with the log
+      }
+    }
+
+    // If the frog is in the river section and not on a log, reset it
+    if (!onLog) {
+      reset();
+      return;  // Exit the method to avoid further checks
+    }
+  }
+
+  // Check for collisions with cars
+  for (Car car : cars) {
+    if (y == car.y && x + size > car.x && x < car.x + car.size) {
+      reset();
+      return;  // Exit the method to avoid further checks
+    }
+  }
+
+  // Check for reaching targets
+  for (int i = 0; i < numTargets; i++) {
+    if (y == 0 && x >= i * 2 * gridSize + gridSize / 2 && x < (i * 2 + 1) * gridSize) {
+      if (!targetsReached[i]) {  // Check if the target is not already reached
+        targetsReached[i] = true;
+        reset();
+        return;  // Exit the method as the frog has reached a target
+      }
+    }
+  }
+}
+
+
+
+  void move(int keyCode) {
+    if (keyCode == UP && y - gridSize >= 0) {
+      y -= gridSize;
+    } else if (keyCode == DOWN && y + gridSize < height - size) {
+      y += gridSize;
+    } else if (keyCode == LEFT && x - gridSize >= 0) {
+      x -= gridSize;
+    } else if (keyCode == RIGHT && x + gridSize < width - size) {
+      x += gridSize;
+    }
+  }
+
+  void reset() {
+    x = width / 2 - size / 2;
+    y = height - size;
+  }
+}
