@@ -1,0 +1,23 @@
+
+class Log {
+  int x, y, speed, size;
+
+  Log(int x, int y, int speed, int size) {
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+    this.size = size * 2;
+  }
+
+  void show() {
+    fill(139, 69, 19);
+    rect(x, y, size, size / 2);
+  }
+
+  void update() {
+    x += speed;
+    if (x > width) {
+      x = -size;
+    }
+  }
+}
