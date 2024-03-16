@@ -1,0 +1,30 @@
+
+class Car {
+  int x, y, speed, size;
+  color bodyColor;
+
+  Car(int x, int y, int speed, int size) {
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+    this.size = size * 2;
+    this.bodyColor = color(random(255), random(255), random(255));
+  }
+
+  void show() {
+    fill(bodyColor);
+    rect(x, y, size, size / 2);
+    fill(0);
+    // Wheels
+    ellipse(x + size * 0.2, y + size / 2, size / 4, size / 4);
+    ellipse(x + size * 0.8, y + size / 2, size / 4, size / 4);
+  }
+
+  void update() {
+    x += speed;
+    if (x - size > width) {
+      x = -size;
+      speed = int(random(1, 4)); // Change speed when re-entering the screen for variation
+    }
+  }
+}
